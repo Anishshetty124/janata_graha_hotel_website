@@ -1,7 +1,8 @@
-import React, { useRef } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { Star, MapPin, Clock, ArrowRight } from 'lucide-react'
+import { throttle } from 'lodash'
 
 // --- Popular Dishes Data (for horizontal scroll) ---
 const popularDishes = [
@@ -29,7 +30,7 @@ const sectionVariants = {
   }
 };
 
-// --- Hero Text Variants (Snappier) ---
+// --- Hero Text Variants ---
 const heroTextVariants = {
   hidden: { opacity: 0, y: 30 },
   visible: { 
@@ -39,59 +40,39 @@ const heroTextVariants = {
   }
 };
 
-// --- (FIX) ADDED HERO IMAGE VARIANTS ---
-const imageVariant1 = { // The big main image
+// --- Hero Image Variants ---
+const imageVariant1 = {
   hidden: { opacity: 0, y: 100, rotate: 3 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    rotate: 0,
-    transition: { duration: 0.8, ease: 'easeOut' }
-  }
+  visible: { opacity: 1, y: 0, rotate: 0, transition: { duration: 0.8, ease: 'easeOut' } }
 };
 
-const imageVariant2 = { // Top-right image
+const imageVariant2 = {
   hidden: { opacity: 0, x: 100 },
-  visible: { 
-    opacity: 1, 
-    x: 0,
-    transition: { duration: 0.8, ease: 'easeOut' }
-  }
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: 'easeOut' } }
 };
 
-const imageVariant3 = { // Bottom-right image
+const imageVariant3 = {
   hidden: { opacity: 0, scale: 0.5 },
-  visible: { 
-    opacity: 1, 
-    scale: 1,
-    transition: { duration: 0.6, ease: 'easeOut' }
-  }
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: 'easeOut' } }
 };
-
 
 // --- Main Home Component ---
 function Home() {
   
-  // This is for the horizontal scroll
+  // Throttle the scroll events for horizontal scroll
   const scrollRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: scrollRef,
-    offset: ['start end', 'end start'] 
-  });
-  
+  const { scrollYProgress } = useScroll({ target: scrollRef, offset: ['start end', 'end start'] });
+
   const x = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
-  // Smooth the motion updates so we don't flood the main thread with tiny changes
-  const springX = useSpring(x, { stiffness: 60, damping: 20 });
-  
+  const springX = useSpring(x, { stiffness: 150, damping: 25 });
 
   return (
-    <div className="bg-white text-dark-text overflow-x-hidden"> {/* Stop horizontal leaks */}
-      
-      
+    <div className="bg-white text-dark-text overflow-x-hidden">
+
       <section className="container mx-auto px-6 min-h-[calc(100vh-80px)] 
                         grid grid-cols-1 md:grid-cols-5 gap-8 items-center">
         
-        {/* --- Left Side: Text (stacked on top on mobile) --- */}
+        {/* --- Left Side: Text --- */}
         <motion.div 
           className="md:col-span-2 text-center md:text-left mt-8 md:mt-0"
           initial="hidden"
@@ -130,8 +111,7 @@ function Home() {
           </motion.div>
         </motion.div>
 
-        {/* --- (FIX) Right Side: Image Grid --- */}
-        {/* 1. The parent grid is now a motion.div */}
+        {/* --- Right Side: Image Grid --- */}
         <motion.div 
           className="md:col-span-3 h-[400px] md:h-full relative grid grid-cols-3 grid-rows-3 gap-4"
           initial="hidden"
@@ -139,72 +119,48 @@ function Home() {
           variants={{
             visible: {
               transition: {
-                // 2. Stagger the children's animations
                 staggerChildren: 0.2,
-                // 3. Delay them slightly to let text start
-                delayChildren: 0.1 
+                delayChildren: 0.1
               }
             }
           }}
         >
-          {/* 4. Children now use variants instead of inline props */}
           <motion.div 
             className="col-span-2 row-span-3 rounded-lg shadow-xl overflow-hidden"
-            variants={{
-              ...imageVariant1,
-              visible: { ...imageVariant1.visible, transition: { ...(imageVariant1.visible.transition || {}), duration: 0.6 } }
-            }}
-            style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
+            variants={imageVariant1}
           >
-            <img src="/hero_img1.jpg" alt="Goan Food" className="w-full h-full object-cover" loading="eager" decoding="async" style={{ transform: 'translateZ(0)' }} />
+            <img src="/hero_img1.jpg" alt="Goan Food" className="w-full h-full object-cover" loading="eager" decoding="async" />
           </motion.div>
           
           <motion.div 
             className="col-span-1 row-span-2 col-start-3 rounded-lg shadow-lg overflow-hidden"
-            variants={{
-              ...imageVariant2,
-              visible: { ...imageVariant2.visible, transition: { ...(imageVariant2.visible.transition || {}), duration: 0.6 } }
-            }}
-            style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
+            variants={imageVariant2}
           >
-            <img src="/hero_img2.jpg" alt="Goan Spices" className="w-full h-full object-cover" loading="eager" decoding="async" style={{ transform: 'translateZ(0)' }} />
+            <img src="/hero_img2.jpg" alt="Goan Spices" className="w-full h-full object-cover" loading="eager" decoding="async" />
           </motion.div>
 
           <motion.div 
             className="col-span-1 row-span-1 col-start-3 row-start-3 bg-ocean-blue rounded-lg shadow-lg"
-            variants={{
-              ...imageVariant3,
-              visible: { ...imageVariant3.visible, transition: { ...(imageVariant3.visible.transition || {}), duration: 0.5 } }
-            }}
-            style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
+            variants={imageVariant3}
           >
-            <img src="/hero_img3.jpg" alt="juices" className="w-full h-full object-cover" loading="eager" decoding="async" style={{ transform: 'translateZ(0)' }} />
+            <img src="/hero_img3.jpg" alt="juices" className="w-full h-full object-cover" loading="eager" decoding="async" />
           </motion.div>
         </motion.div>
       </section>
 
-    {/* --- Horizontal Scroll Section (FIXED with Nested Animation) --- */}
+      {/* --- Horizontal Scroll Section --- */}
       <section ref={scrollRef} className="py-20 bg-light-cream relative h-[500px] overflow-hidden">
-        {/* Section Title (Sticky) */}
         <div className="container mx-auto px-6 absolute top-20 left-1/2 -translate-x-1/2 z-10">
           <h2 className="text-4xl font-bold text-center text-dark-text font-heading">
             Our Popular Dishes
           </h2>
         </div>
-        
-        {/* OUTER div: Controlled by your "slide-on-scroll" (style={{ x }})
-        */}
+
         <motion.div 
           className="absolute top-[150px] left-[10%]"
-          style={{ x: springX }} // Use the smoothed spring motion value
+          style={{ x: springX }}  // Smoothed motion for scroll
         >
-          {/* INNER div: Controlled by the new "autoplay" (animate)
-            This stops the lag.
-          */}
-          {/* INNER div: Controlled by the "autoplay" */}
-          {/* CSS-powered marquee for the continuous horizontal scroll (GPU-friendly) */}
           <div className="marquee flex space-x-8">
-            {/* ----- SET 1 (Original Content) ----- */}
             {popularDishes.map((dish) => (
               <div key={dish.name} className="w-[350px] h-[300px] flex-shrink-0">
                 <div className="relative w-full h-full rounded-lg shadow-xl overflow-hidden group">
@@ -226,7 +182,6 @@ function Home() {
               </Link>
             </div>
 
-            {/* ----- SET 2 (DUPLICATED Content for seamless loop) ----- */}
             {popularDishes.map((dish) => (
               <div key={`${dish.name}-duplicate`} className="w-[350px] h-[300px] flex-shrink-0">
                 <div className="relative w-full h-full rounded-lg shadow-xl overflow-hidden group">
@@ -247,12 +202,11 @@ function Home() {
                 <span className="text-2xl font-bold font-heading">View Full Menu</span>
               </Link>
             </div>
-
           </div>
         </motion.div>
       </section>
 
-      {/* --- Testimonials Section (Asymmetrical) --- */}
+      {/* --- Testimonials Section --- */}
       <motion.section 
         className="py-20 relative"
         variants={sectionVariants}
@@ -270,7 +224,6 @@ function Home() {
               <motion.div 
                 key={index}
                 className="bg-white p-8 rounded-lg shadow-xl relative"
-                style={{ zIndex: index + 1, y: index === 1 ? -40 : 0 }} 
                 variants={sectionVariants}
                 initial="hidden"
                 whileInView="visible"
@@ -331,7 +284,7 @@ function Home() {
         </div>
       </motion.section>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
