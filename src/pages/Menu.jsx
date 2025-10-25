@@ -3,28 +3,29 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Search, ChevronDown } from 'lucide-react'
 
 // --- Menu Data (in-code) ---
+// CHANGED: Image paths are now permanent, static URLs from Wikimedia Commons
 const menuData = [
   {
     category: "Breakfast",
     items: [
-      { name: "Masala Dosa", description: "Crispy rice crepe, spiced potato filling...", price: 120, image: "/dishes/dosa.jpg" },
-      { name: "Idli Sambar", description: "Steamed rice cakes served with lentil soup.", price: 80, image: "/dishes/idli.jpg" },
-      { name: "Puri Bhaji", description: "Fluffy fried bread with spiced potato curry.", price: 110, image: "/dishes/puri-bhaji.jpg" }
+      { name: "Masala Dosa", description: "Crispy rice crepe, spiced potato filling...", price: 120, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Masala_Dosa_with_Sambar_and_Chutney.jpg/1280px-Masala_Dosa_with_Sambar_and_Chutney.jpg" },
+      { name: "Idli Sambar", description: "Steamed rice cakes served with lentil soup.", price: 80, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Idli_Sambar_and_Vada.JPG/1280px-Idli_Sambar_and_Vada.JPG" },
+      { name: "Puri Bhaji", description: "Fluffy fried bread with spiced potato curry.", price: 110, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Puri_Bhaji_North_India.jpg/1280px-Puri_Bhaji_North_India.jpg" }
     ]
   },
   {
     category: "Goan Lunch Specials",
     items: [
-      { name: "Goan Fish Thali", description: "Complete meal with fish curry, rice, sol kadi.", price: 250, image: "/dishes/thali.jpg" },
-      { name: "Prawn Curry Rice", description: "Classic Goan specialty, coconut-based.", price: 300, image: "/dishes/prawn-curry.jpg" },
-      { name: "Kingfish Rava Fry", description: "Semolina-coated, shallow-fried kingfish.", price: 400, image: "/dishes/kingfish.jpg" }
+      { name: "Goan Fish Thali", description: "Complete meal with fish curry, rice, sol kadi.", price: 250, image: "https://upload.wikimedia.org/wikipedia/commons/3/33/Goan_Fish_Thali.jpg" },
+      { name: "Prawn Curry Rice", description: "Classic Goan specialty, coconut-based.", price: 300, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Goan_Prawn_Curry.jpg/1024px-Goan_Prawn_Curry.jpg" },
+      { name: "Kingfish Rava Fry", description: "Semolina-coated, shallow-fried kingfish.", price: 400, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Goan_Kingfish_Fry.jpg/1280px-Goan_Kingfish_Fry.jpg" }
     ]
   },
   {
     category: "Appetizers",
     items: [
-      { name: "Veg Spring Rolls", description: "Crispy fried rolls stuffed with vegetables.", price: 150, image: "/dishes/spring-rolls.jpg" },
-      { name: "Paneer Tikka", description: "Marinated cottage cheese cubes grilled.", price: 220, image: "/dishes/paneer-tikka.jpg" }
+      { name: "Veg Spring Rolls", description: "Crispy fried rolls stuffed with vegetables.", price: 150, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Vegetable_Spring_Rolls.jpg/1280px-Vegetable_Spring_Rolls.jpg" },
+      { name: "Paneer Tikka", description: "Marinated cottage cheese cubes grilled.", price: 220, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Paneer_Tikka_Seekh_Kebab.jpg/1280px-Paneer_Tikka_Seekh_Kebab.jpg" }
     ]
   }
 ];
@@ -51,7 +52,6 @@ const suggestionsVariants = {
 
 function Menu() {
   const [searchQuery, setSearchQuery] = useState('');
-  // CHANGED: State is now an array, defaults to empty []
   const [openCategories, setOpenCategories] = useState([]); 
 
   // A flat list of ALL items, used for search recommendations
@@ -87,7 +87,7 @@ function Menu() {
     setSearchQuery(itemName);
   };
 
-  // CHANGED: Click handler now adds/removes from the array
+  // Click handler now adds/removes from the array
   const handleCategoryClick = (categoryName) => {
     setOpenCategories(prevCategories => {
       if (prevCategories.includes(categoryName)) {
@@ -100,7 +100,7 @@ function Menu() {
     });
   };
 
-  // --- NEW: This effect syncs the open accordions with the search query ---
+  // This effect syncs the open accordions with the search query
   useEffect(() => {
     if (searchQuery.trim()) {
       // If user is searching, find all categories with results and open them
@@ -167,7 +167,6 @@ function Menu() {
         
         {filteredMenuData.length > 0 ? (
           filteredMenuData.map((category) => {
-            // CHANGED: Check if category name is in the array
             const isOpen = openCategories.includes(category.category);
             return (
               <section key={category.category} className="bg-white rounded-lg shadow-md overflow-hidden">
