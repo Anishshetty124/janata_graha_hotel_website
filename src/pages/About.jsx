@@ -42,7 +42,7 @@ function About() {
           transition={{ type: 'spring', stiffness: 300 }}
         >
           <img 
-            src="/about-us.jpg" // Links to public/about-us.jpg
+            src="/hotel.png" // Links to public/hotel.png
             alt="Inside Janata Graha Restaurant" 
             className="w-full h-full object-cover"
           />

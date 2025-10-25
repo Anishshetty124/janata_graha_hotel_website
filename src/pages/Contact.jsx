@@ -64,7 +64,7 @@ function Contact() {
             </motion.div>
             <motion.div className="flex items-center" variants={itemVariants}>
               <Mail className="text-sand mr-4" size={24} />
-              <a href="mailto:info@janatagraha.com" className="text-gray-700 hover:text-ocean-blue">
+              <a href="mailto:janatagraha@gmail.com" className="text-gray-700 hover:text-ocean-blue">
                 info@janatagraha.com
               </a>
             </motion.div>

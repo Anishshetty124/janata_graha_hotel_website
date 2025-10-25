@@ -8,24 +8,24 @@ const menuData = [
   {
     category: "Breakfast",
     items: [
-      { name: "Masala Dosa", description: "Crispy rice crepe, spiced potato filling...", price: 120, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Masala_Dosa_with_Sambar_and_Chutney.jpg/1280px-Masala_Dosa_with_Sambar_and_Chutney.jpg" },
-      { name: "Idli Sambar", description: "Steamed rice cakes served with lentil soup.", price: 80, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Idli_Sambar_and_Vada.JPG/1280px-Idli_Sambar_and_Vada.JPG" },
-      { name: "Puri Bhaji", description: "Fluffy fried bread with spiced potato curry.", price: 110, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Puri_Bhaji_North_India.jpg/1280px-Puri_Bhaji_North_India.jpg" }
+      { name: "Masala Dosa", description: "Crispy rice crepe, spiced potato filling...", price: 120 },
+      { name: "Idli Sambar", description: "Steamed rice cakes served with lentil soup.", price: 80 },
+      { name: "Puri Bhaji", description: "Fluffy fried bread with spiced potato curry.", price: 110 }
     ]
   },
   {
     category: "Goan Lunch Specials",
     items: [
-      { name: "Goan Fish Thali", description: "Complete meal with fish curry, rice, sol kadi.", price: 250, image: "https://upload.wikimedia.org/wikipedia/commons/3/33/Goan_Fish_Thali.jpg" },
-      { name: "Prawn Curry Rice", description: "Classic Goan specialty, coconut-based.", price: 300, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Goan_Prawn_Curry.jpg/1024px-Goan_Prawn_Curry.jpg" },
-      { name: "Kingfish Rava Fry", description: "Semolina-coated, shallow-fried kingfish.", price: 400, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Goan_Kingfish_Fry.jpg/1280px-Goan_Kingfish_Fry.jpg" }
+      { name: "Goan Fish Thali", description: "Complete meal with fish curry, rice, sol kadi.", price: 250 },
+      { name: "Prawn Curry Rice", description: "Classic Goan specialty, coconut-based.", price: 300 },
+      { name: "Kingfish Rava Fry", description: "Semolina-coated, shallow-fried kingfish.", price: 400 }
     ]
   },
   {
     category: "Appetizers",
     items: [
-      { name: "Veg Spring Rolls", description: "Crispy fried rolls stuffed with vegetables.", price: 150, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Vegetable_Spring_Rolls.jpg/1280px-Vegetable_Spring_Rolls.jpg" },
-      { name: "Paneer Tikka", description: "Marinated cottage cheese cubes grilled.", price: 220, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Paneer_Tikka_Seekh_Kebab.jpg/1280px-Paneer_Tikka_Seekh_Kebab.jpg" }
+      { name: "Veg Spring Rolls", description: "Crispy fried rolls stuffed with vegetables.", price: 150 },
+      { name: "Paneer Tikka", description: "Marinated cottage cheese cubes grilled.", price: 220 }
     ]
   }
 ];
@@ -210,10 +210,9 @@ function Menu() {
                               exit="exit"
                               layout
                               className="bg-white rounded-lg shadow-lg overflow-hidden transform 
-                                         hover:shadow-xl transition-shadow duration-300"
+                                           hover:shadow-xl transition-shadow duration-300"
                             >
-                              <img src={item.image} alt={item.name} className="w-full h-48 object-cover"/>
-                              <div className="p-5">
+                                <div className="p-5">
                                 <h3 className="text-xl font-bold text-dark-text mb-1">{item.name}</h3>
                                 <p className="text-gray-600 text-sm mb-3 h-10">{item.description}</p>
                                 <p className="text-xl font-semibold text-ocean-blue">₹{item.price}</p>
