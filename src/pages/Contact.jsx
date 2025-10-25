@@ -110,7 +110,8 @@ function Contact() {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3849.507421389657!2d74.1039818153628!3d15.2415124641907!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbfb0193134e5a3%3A0x6b4c3e1e245c618!2sJanata%20Graha!5e0!3m2!1sen!2sin!4v1672588000000"
+            title="Janata Graha location"
+            src="https://www.google.com/maps?q=15.2627621,74.1079106&z=17&output=embed"
             width="100%"
             height="100%"
             style={{ border: 0 }}
