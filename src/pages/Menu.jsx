@@ -1,8 +1,8 @@
-import React, { useState, useMemo, useEffect } from 'react' // Import useEffect
+import React, { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, ChevronDown } from 'lucide-react'
 
-// --- Menu Data (Updated from Image) ---
+// --- Updated Menu Data from Image (Janta - Udupi) ---
 const menuData = [
   {
     category: "Breakfast & Snacks",
@@ -79,8 +79,7 @@ const suggestionsVariants = {
   exit: { opacity: 0, y: -10 }
 };
 
-
-function Menu() {
+export default function Menu() {
   const [searchQuery, setSearchQuery] = useState('');
   const [openCategories, setOpenCategories] = useState([]); 
 
@@ -143,7 +142,6 @@ function Menu() {
       </motion.h1>
       <p className="text-center text-gray-500 mb-10 font-medium">Pure Vegetarian</p>
       
-      {/* --- Animated Search Bar --- */}
       <motion.div 
         className="relative max-w-lg mx-auto mb-16 z-20"
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
@@ -182,15 +180,12 @@ function Menu() {
         </AnimatePresence>
       </motion.div>
 
-      {/* --- Accordion Menu Sections --- */}
       <div className="space-y-4 max-w-4xl mx-auto z-10">
-        
         {filteredMenuData.length > 0 ? (
           filteredMenuData.map((category) => {
             const isOpen = openCategories.includes(category.category);
             return (
               <section key={category.category} className="bg-white rounded-lg shadow-md overflow-hidden">
-                
                 <button 
                   onClick={() => handleCategoryClick(category.category)}
                   className="w-full flex justify-between items-center p-5 text-left
@@ -199,9 +194,7 @@ function Menu() {
                   <h2 className="text-2xl font-bold text-ocean-blue">
                     {category.category}
                   </h2>
-                  <motion.div
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                  >
+                  <motion.div animate={{ rotate: isOpen ? 180 : 0 }}>
                     <ChevronDown className="text-ocean-blue" size={24} />
                   </motion.div>
                 </button>
@@ -214,18 +207,13 @@ function Menu() {
                       animate="visible"
                       exit="exit"
                     >
-                      <motion.div 
-                        layout
-                        className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6"
-                      >
+                      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
                         <AnimatePresence>
                           {category.items.map((item) => (
                             <motion.div
                               key={item.name}
                               variants={itemCardVariants}
-                              initial="hidden"
-                              animate="visible"
-                              exit="exit"
+                              initial="hidden" animate="visible" exit="exit"
                               layout
                               className="bg-white rounded-lg shadow-lg overflow-hidden transform 
                                          hover:shadow-xl transition-shadow duration-300"
@@ -247,18 +235,12 @@ function Menu() {
             );
           })
         ) : (
-          <motion.div 
-            className="text-center"
-            initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }}
-          >
+          <motion.div className="text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <h3 className="text-2xl font-semibold text-gray-700">No dishes found</h3>
-            <p className="text-gray-500 mt-2">Try a different search term!</p>
           </motion.div>
         )}
       </div>
-      
     </div>
   )
 }
 
-export default Menu
