@@ -1,30 +1,60 @@
-import React, { useState, useMemo, useEffect } from 'react' // Import useEffect
+import React, { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, ChevronDown } from 'lucide-react'
 
-// --- Menu Data (in-code) ---
+// --- Updated Menu Data from Image ---
 const menuData = [
   {
-    category: "Breakfast",
+    category: "Snacks & Breakfast",
     items: [
-      { name: "Masala Dosa", description: "Crispy rice crepe, spiced potato filling...", price: 120, image: "/dishes/dosa.jpg" },
-      { name: "Idli Sambar", description: "Steamed rice cakes served with lentil soup.", price: 80, image: "/dishes/idli.jpg" },
-      { name: "Puri Bhaji", description: "Fluffy fried bread with spiced potato curry.", price: 110, image: "/dishes/puri-bhaji.jpg" }
+      { name: "Seera", description: "Sweet semolina pudding with ghee and nuts.", price: 40, image: "/dishes/seera.jpg" },
+      { name: "Upma Plate", description: "Savory semolina porridge cooked with vegetables.", price: 30, image: "/dishes/upma.jpg" },
+      { name: "Buns", description: "Sweet, fluffy fried banana-infused bread.", price: 20, image: "/dishes/buns.jpg" },
+      { name: "Samosa Plate", description: "Crispy pastry triangles with spiced potato filling.", price: 50, image: "/dishes/samosa.jpg" },
+      { name: "Potato Wada Plate", description: "Spiced mashed potato fritters in gram flour batter.", price: 50, image: "/dishes/potato-wada.jpg" },
+      { name: "Idli Plate", description: "Soft steamed fermented rice and lentil cakes.", price: 50, image: "/dishes/idli.jpg" },
+      { name: "Urid Wada Plate", description: "Crispy, savory deep-fried lentil donuts.", price: 80, image: "/dishes/wada.jpg" },
+      { name: "Idli Wada", description: "A classic combo of steamed idli and crispy wada.", price: 80, image: "/dishes/idli-wada.jpg" },
+      { name: "Single Idli Wada", description: "One piece each of idli and wada.", price: 70, image: "/dishes/single-idli-wada.jpg" }
     ]
   },
   {
-    category: "Goan Lunch Specials",
+    category: "Bhaji & Starters",
     items: [
-      { name: "Goan Fish Thali", description: "Complete meal with fish curry, rice, sol kadi.", price: 250, image: "/dishes/thali.jpg" },
-      { name: "Prawn Curry Rice", description: "Classic Goan specialty, coconut-based.", price: 300, image: "/dishes/prawn-curry.jpg" },
-      { name: "Kingfish Rava Fry", description: "Semolina-coated, shallow-fried kingfish.", price: 400, image: "/dishes/kingfish.jpg" }
+      { name: "Patal Bhaji", description: "Thin, spicy coconut-based gravy.", price: 45, image: "/dishes/patal-bhaji.jpg" },
+      { name: "Mix Bhaji", description: "Assorted seasonal vegetable curry.", price: 45, image: "/dishes/mix-bhaji.jpg" },
+      { name: "Potato Bhaji", description: "Dry tempered potatoes with mustard and curry leaves.", price: 45, image: "/dishes/potato-bhaji.jpg" },
+      { name: "Special Kurma Bhaji", description: "Rich, creamy vegetable gravy with coconut and spices.", price: 45, image: "/dishes/kurma.jpg" },
+      { name: "Chana Masala", description: "Hearty chickpea curry in a tomato-onion base.", price: 60, image: "/dishes/chana.jpg" },
+      { name: "Puri Plate", description: "Deep-fried wheat bread served with bhaji.", price: 40, image: "/dishes/puri.jpg" },
+      { name: "Dhahi (Curd) Wada", description: "Lentil donuts soaked in seasoned, cool yogurt.", price: 80, image: "/dishes/dahi-wada.jpg" },
+      { name: "Single Dhahi Wada", description: "Single serving of lentil donut in yogurt.", price: 40, image: "/dishes/single-dahi.jpg" },
+      { name: "Onion Bajeya Plate", description: "Crispy deep-fried onion fritters.", price: 40, image: "/dishes/onion-bhaji.jpg" },
+      { name: "Mirchi Bhjeya", description: "Spicy green chili fritters.", price: 30, image: "/dishes/mirchi.jpg" }
     ]
   },
   {
-    category: "Appetizers",
+    category: "Dosa & Uttappa",
     items: [
-      { name: "Veg Spring Rolls", description: "Crispy fried rolls stuffed with vegetables.", price: 150, image: "/dishes/spring-rolls.jpg" },
-      { name: "Paneer Tikka", description: "Marinated cottage cheese cubes grilled.", price: 220, image: "/dishes/paneer-tikka.jpg" }
+      { name: "Masala Dosa", description: "Rice crepe filled with spiced potato masala.", price: 80, image: "/dishes/masala-dosa.jpg" },
+      { name: "Plain Dosa", description: "Crispy and golden fermented rice crepe.", price: 70, image: "/dishes/plain-dosa.jpg" },
+      { name: "Paper Masala Dosa", description: "Extra thin, large crispy crepe (Available after 3:30 PM).", price: 100, image: "/dishes/paper-masala.jpg" },
+      { name: "Paper Plain Dosa", description: "Ultra thin, crispy long crepe.", price: 90, image: "/dishes/paper-plain.jpg" },
+      { name: "Rawa Masala Dosa", description: "Crispy semolina crepe with potato filling.", price: 100, image: "/dishes/rawa-masala.jpg" },
+      { name: "Rawa Plain", description: "Lacy, crispy semolina-based crepe.", price: 100, image: "/dishes/rawa-plain.jpg" },
+      { name: "Mysore Masala Dosa", description: "Dosa with spicy red chutney and potato filling.", price: 100, image: "/dishes/mysore-masala.jpg" },
+      { name: "Onion Uttappa", description: "Thick rice pancake topped with chopped onions.", price: 80, image: "/dishes/uttappa.jpg" },
+      { name: "Veg Tomato Omlet", description: "Savory gram flour pancake with tomatoes and herbs.", price: 80, image: "/dishes/veg-omlet.jpg" }
+    ]
+  },
+  {
+    category: "Meals & Beverages",
+    items: [
+      { name: "Rice Plate", description: "Full vegetarian meal (11:30AM-3:30PM | 7PM-9PM).", price: 120, image: "/dishes/thali.jpg" },
+      { name: "Extra Rice", description: "Additional portion of steamed rice.", price: 40, image: "/dishes/extra-rice.jpg" },
+      { name: "Tea", description: "Freshly brewed milk tea.", price: 20, image: "/dishes/tea.jpg" },
+      { name: "Special Tea", description: "Stronger, aromatic premium tea.", price: 30, image: "/dishes/special-tea.jpg" },
+      { name: "Nescafe", description: "Warm cup of instant coffee.", price: 30, image: "/dishes/nescafe.jpg" }
     ]
   }
 ];
@@ -51,25 +81,21 @@ const suggestionsVariants = {
 
 function Menu() {
   const [searchQuery, setSearchQuery] = useState('');
-  // CHANGED: State is now an array, defaults to empty []
   const [openCategories, setOpenCategories] = useState([]); 
 
-  // A flat list of ALL items, used for search recommendations
   const allMenuItems = useMemo(() => 
     menuData.flatMap(category => 
       category.items.map(item => ({...item, category: category.category}))
     )
   , []);
 
-  // Filtered list for search recommendations dropdown
   const suggestions = useMemo(() => {
     if (!searchQuery) return [];
     return allMenuItems.filter(item => 
       item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    ).slice(0, 5); // Show top 5 suggestions
+    ).slice(0, 5);
   }, [searchQuery, allMenuItems]);
 
-  // Filtered menu *structure* for the accordions
   const filteredMenuData = useMemo(() => {
     if (!searchQuery) return menuData;
 
@@ -82,35 +108,28 @@ function Menu() {
     })).filter(category => category.items.length > 0);
   }, [searchQuery]);
   
-  // Handle clicking a suggestion
   const handleSuggestionClick = (itemName) => {
     setSearchQuery(itemName);
   };
 
-  // CHANGED: Click handler now adds/removes from the array
   const handleCategoryClick = (categoryName) => {
     setOpenCategories(prevCategories => {
       if (prevCategories.includes(categoryName)) {
-        // It's open, so close it (filter it out)
         return prevCategories.filter(cat => cat !== categoryName);
       } else {
-        // It's closed, so open it (add it)
         return [...prevCategories, categoryName];
       }
     });
   };
 
-  // --- NEW: This effect syncs the open accordions with the search query ---
   useEffect(() => {
     if (searchQuery.trim()) {
-      // If user is searching, find all categories with results and open them
       const categoriesWithResults = filteredMenuData.map(category => category.category);
       setOpenCategories(categoriesWithResults);
     } else {
-      // If search is empty, close all accordions
       setOpenCategories([]);
     }
-  }, [searchQuery, filteredMenuData]); // Re-run when search or filtered data changes
+  }, [searchQuery, filteredMenuData]);
 
   return (
     <div className="container mx-auto px-6 py-16 min-h-screen">
@@ -119,8 +138,9 @@ function Menu() {
         className="text-5xl font-bold text-center text-dark-text mb-6"
         initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }}
       >
-        Our Full Menu
+        Janta - Udupi Restaurant
       </motion.h1>
+      <p className="text-center text-gray-500 mb-10">Pure Vegetarian</p>
       
       {/* --- Animated Search Bar --- */}
       <motion.div 
@@ -140,7 +160,6 @@ function Menu() {
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
         </div>
 
-        {/* --- Search Recommendations Dropdown --- */}
         <AnimatePresence>
           {suggestions.length > 0 && (
             <motion.div 
@@ -167,12 +186,10 @@ function Menu() {
         
         {filteredMenuData.length > 0 ? (
           filteredMenuData.map((category) => {
-            // CHANGED: Check if category name is in the array
             const isOpen = openCategories.includes(category.category);
             return (
               <section key={category.category} className="bg-white rounded-lg shadow-md overflow-hidden">
                 
-                {/* Accordion Header Button */}
                 <button 
                   onClick={() => handleCategoryClick(category.category)}
                   className="w-full flex justify-between items-center p-5 text-left
@@ -182,13 +199,12 @@ function Menu() {
                     {category.category}
                   </h2>
                   <motion.div
-                    animate={{ rotate: isOpen ? 180 : 0 }} // Animate chevron
+                    animate={{ rotate: isOpen ? 180 : 0 }}
                   >
                     <ChevronDown className="text-ocean-blue" size={24} />
                   </motion.div>
                 </button>
 
-                {/* Accordion Content (Dishes) */}
                 <AnimatePresence>
                   {isOpen && (
                     <motion.div
