@@ -261,3 +261,155 @@ function Menu() {
 }
 
 export default Menu
+    setSearchQuery(itemName);
+  };
+
+  const handleCategoryClick = (categoryName) => {
+    setOpenCategories(prevCategories => {
+      if (prevCategories.includes(categoryName)) {
+        return prevCategories.filter(cat => cat !== categoryName);
+      } else {
+        return [...prevCategories, categoryName];
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      const categoriesWithResults = filteredMenuData.map(category => category.category);
+      setOpenCategories(categoriesWithResults);
+    } else {
+      setOpenCategories([]);
+    }
+  }, [searchQuery, filteredMenuData]);
+
+  return (
+    <div className="container mx-auto px-6 py-16 min-h-screen">
+      
+      <motion.h1 
+        className="text-5xl font-bold text-center text-dark-text mb-6"
+        initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }}
+      >
+        Janta - Udupi Restaurant
+      </motion.h1>
+      <p className="text-center text-gray-500 mb-10">Pure Vegetarian</p>
+      
+      {/* --- Animated Search Bar --- */}
+      <motion.div 
+        className="relative max-w-lg mx-auto mb-16 z-20"
+        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+      >
+        <div className="relative">
+          <input 
+            type="text"
+            placeholder="Search for a dish..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full px-5 py-3 pl-12 rounded-full bg-white shadow-lg
+                       border border-gray-200 focus:outline-none 
+                       focus:ring-2 focus:ring-ocean-blue"
+          />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+        </div>
+
+        <AnimatePresence>
+          {suggestions.length > 0 && (
+            <motion.div 
+              className="absolute top-full w-full mt-2 bg-white shadow-xl rounded-lg overflow-hidden"
+              variants={suggestionsVariants}
+              initial="hidden" animate="visible" exit="hidden"
+            >
+              {suggestions.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => handleSuggestionClick(item.name)}
+                  className="w-full text-left px-5 py-3 hover:bg-light-cream text-dark-text"
+                >
+                  {item.name}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* --- Accordion Menu Sections --- */}
+      <div className="space-y-4 max-w-4xl mx-auto z-10">
+        
+        {filteredMenuData.length > 0 ? (
+          filteredMenuData.map((category) => {
+            const isOpen = openCategories.includes(category.category);
+            return (
+              <section key={category.category} className="bg-white rounded-lg shadow-md overflow-hidden">
+                
+                <button 
+                  onClick={() => handleCategoryClick(category.category)}
+                  className="w-full flex justify-between items-center p-5 text-left
+                             bg-gray-50 hover:bg-light-cream transition-colors"
+                >
+                  <h2 className="text-2xl font-bold text-ocean-blue">
+                    {category.category}
+                  </h2>
+                  <motion.div
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                  >
+                    <ChevronDown className="text-ocean-blue" size={24} />
+                  </motion.div>
+                </button>
+
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      variants={accordionVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                    >
+                      <motion.div 
+                        layout
+                        className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6"
+                      >
+                        <AnimatePresence>
+                          {category.items.map((item) => (
+                            <motion.div
+                              key={item.name}
+                              variants={itemCardVariants}
+                              initial="hidden"
+                              animate="visible"
+                              exit="exit"
+                              layout
+                              className="bg-white rounded-lg shadow-lg overflow-hidden transform 
+                                         hover:shadow-xl transition-shadow duration-300"
+                            >
+                              <img src={item.image} alt={item.name} className="w-full h-48 object-cover"/>
+                              <div className="p-5">
+                                <h3 className="text-xl font-bold text-dark-text mb-1">{item.name}</h3>
+                                <p className="text-gray-600 text-sm mb-3 h-10">{item.description}</p>
+                                <p className="text-xl font-semibold text-ocean-blue">₹{item.price}</p>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </AnimatePresence>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </section>
+            );
+          })
+        ) : (
+          <motion.div 
+            className="text-center"
+            initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }}
+          >
+            <h3 className="text-2xl font-semibold text-gray-700">No dishes found</h3>
+            <p className="text-gray-500 mt-2">Try a different search term!</p>
+          </motion.div>
+        )}
+      </div>
+      
+    </div>
+  )
+}
+
+export default Menu
